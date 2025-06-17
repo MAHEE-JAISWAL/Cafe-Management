@@ -7,14 +7,12 @@ import OrderSummary from "../components/Order/OrderSummary"
 import { ShoppingCart, Users } from "lucide-react"
 
 const MenuPage = () => {
-  const [searchParams] = useSearchParams()
-  const tableNumber = searchParams.get("table") || "1"
-
   const [menuItems, setMenuItems] = useState([])
   const [cart, setCart] = useState([])
   const [loading, setLoading] = useState(true)
   const [selectedCategory, setSelectedCategory] = useState("all")
   const [showCart, setShowCart] = useState(false)
+  const tableNumber = "5" // Simulated table number
 
   const categories = [
     { id: "all", name: "All Items" },
@@ -25,20 +23,83 @@ const MenuPage = () => {
     { id: "specials", name: "Specials" },
   ]
 
-  useEffect(() => {
-    fetchMenuItems()
-  }, [])
-
-  const fetchMenuItems = async () => {
-    try {
-      const response = await api.get("/menu")
-      setMenuItems(response.data)
-    } catch (error) {
-      toast.error("Failed to load menu items")
-    } finally {
-      setLoading(false)
+  // Sample menu data
+  const sampleMenuItems = [
+    {
+      _id: "1",
+      name: "Truffle Mushroom Risotto",
+      description: "Creamy arborio rice with wild mushrooms, truffle oil, and parmesan cheese",
+      price: 24.99,
+      category: "main-course",
+      image: "https://images.unsplash.com/photo-1476124369491-e7addf5db371?w=400&h=250&fit=crop",
+      rating: 4.8,
+      prepTime: "25-30",
+      isSpecial: false
+    },
+    {
+      _id: "2",
+      name: "Crispy Calamari",
+      description: "Golden fried squid rings served with marinara sauce and lemon wedges",
+      price: 12.99,
+      category: "appetizers",
+      image: "https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?w=400&h=250&fit=crop",
+      rating: 4.6,
+      prepTime: "10-15",
+      isSpecial: false
+    },
+    {
+      _id: "3",
+      name: "Chocolate Lava Cake",
+      description: "Warm chocolate cake with molten center, served with vanilla ice cream",
+      price: 8.99,
+      category: "desserts",
+      image: "https://images.unsplash.com/photo-1624353365286-3f8d62daad51?w=400&h=250&fit=crop",
+      rating: 4.9,
+      prepTime: "12-15",
+      isSpecial: false
+    },
+    {
+      _id: "4",
+      name: "Craft Beer Selection",
+      description: "Choice of local IPA, wheat beer, or seasonal special on tap",
+      price: 6.99,
+      category: "beverages",
+      image: "https://images.unsplash.com/photo-1608270586620-248524c67de9?w=400&h=250&fit=crop",
+      rating: 4.4,
+      prepTime: "2-5",
+      isSpecial: false
+    },
+    {
+      _id: "5",
+      name: "Chef's Special Salmon",
+      description: "Pan-seared Atlantic salmon with quinoa pilaf and seasonal vegetables",
+      price: 28.99,
+      category: "specials",
+      image: "https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=400&h=250&fit=crop",
+      rating: 4.7,
+      prepTime: "20-25",
+      isSpecial: true
+    },
+    {
+      _id: "6",
+      name: "Mediterranean Flatbread",
+      description: "Thin crust topped with feta, olives, tomatoes, and fresh herbs",
+      price: 14.99,
+      category: "appetizers",
+      image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=400&h=250&fit=crop",
+      rating: 4.5,
+      prepTime: "15-18",
+      isSpecial: false
     }
-  }
+  ]
+
+  useEffect(() => {
+    // Simulate API call
+    setTimeout(() => {
+      setMenuItems(sampleMenuItems)
+      setLoading(false)
+    }, 1000)
+  }, [])
 
   const addToCart = (menuItem) => {
     const existingItem = cart.find((item) => item._id === menuItem._id)
@@ -49,7 +110,12 @@ const MenuPage = () => {
       setCart([...cart, { ...menuItem, quantity: 1 }])
     }
 
-    toast.success(`${menuItem.name} added to cart`)
+    // Show success message
+    const successDiv = document.createElement('div')
+    successDiv.className = 'fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg z-50'
+    successDiv.textContent = `${menuItem.name} added to cart`
+    document.body.appendChild(successDiv)
+    setTimeout(() => document.body.removeChild(successDiv), 2000)
   }
 
   const updateCartQuantity = (itemId, quantity) => {
@@ -113,7 +179,7 @@ const MenuPage = () => {
               <button
                 key={category.id}
                 onClick={() => setSelectedCategory(category.id)}
-                className={`whitespace-nowrap pb-2 px-1 border-b-2 font-medium text-sm ${selectedCategory === category.id
+                className={`whitespace-nowrap pb-2 px-1 border-b-2 font-medium text-sm transition-colors ${selectedCategory === category.id
                     ? "border-orange-500 text-orange-600"
                     : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
                   }`}
@@ -153,5 +219,4 @@ const MenuPage = () => {
     </div>
   )
 }
-
 export default MenuPage

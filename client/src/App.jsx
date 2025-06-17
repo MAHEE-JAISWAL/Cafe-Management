@@ -23,9 +23,9 @@ function App() {
             <Route
               path="/manager"
               element={
-                <ProtectedRoute>
+                
                   <ManagerDashboard />
-                </ProtectedRoute>
+                
               }
             />
 

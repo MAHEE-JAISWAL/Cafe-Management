@@ -1,43 +1,45 @@
-import { useState } from "react"
-import { Navigate } from "react-router-dom"
-import { useAuth } from "../context/AuthContext.jsx"
-import toast from "react-hot-toast"
-import { Lock, User, Coffee } from "lucide-react"
+import { useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom"; // Import useNavigate
+import { useAuth } from "../context/AuthContext.jsx";
+import toast from "react-hot-toast";
+import { Lock, User, Coffee } from "lucide-react";
 
 const ManagerLogin = () => {
-  const { login, manager } = useAuth()
+  const { login, manager } = useAuth();
+  const navigate = useNavigate(); // Initialize useNavigate
   const [formData, setFormData] = useState({
     username: "",
     password: "",
-  })
-  const [isLoading, setIsLoading] = useState(false)
+  });
+  const [isLoading, setIsLoading] = useState(false);
 
   // Redirect if already logged in
   if (manager) {
-    return <Navigate to="/manager" />
+    return <Navigate to="/manager" />;
   }
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
-    })
-  }
+    });
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setIsLoading(true)
+    e.preventDefault();
+    setIsLoading(true);
 
-    const result = await login(formData.username, formData.password)
+    const result = await login(formData.username, formData.password);
 
     if (result.success) {
-      toast.success("Login successful!")
+      toast.success("Login successful!");
+      navigate("/manager"); // Redirect to ManagerDashboard
     } else {
-      toast.error(result.error)
+      toast.error(result.error);
     }
 
-    setIsLoading(false)
-  }
+    setIsLoading(false);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 to-orange-100 flex items-center justify-center p-4">
@@ -55,7 +57,10 @@ const ManagerLogin = () => {
         <div className="bg-white rounded-lg shadow-lg p-8">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="username"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 Username
               </label>
               <div className="relative">
@@ -76,7 +81,10 @@ const ManagerLogin = () => {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 Password
               </label>
               <div className="relative">
@@ -114,7 +122,7 @@ const ManagerLogin = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ManagerLogin
+export default ManagerLogin;

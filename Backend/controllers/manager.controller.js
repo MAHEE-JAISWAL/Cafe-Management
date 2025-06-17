@@ -24,5 +24,14 @@ export class ManagerController {
             
         }
     }
+    async getProfile(req, res, next) {
+        const response = new ResponseHandler(res);
+        try {
+            const manager = req.manager; // `managerAuth` middleware adds `req.manager`
+            response.success(manager, "Manager profile fetched successfully");
+        } catch (error) {
+            next(error);
+        }
+    }
 }
 
