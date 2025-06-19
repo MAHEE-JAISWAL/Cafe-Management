@@ -12,3 +12,5 @@ export const connectDB= async() => {
         process.exit(1); // Exit the process with failure
     }
 }
+
+//Added for testing purposes
